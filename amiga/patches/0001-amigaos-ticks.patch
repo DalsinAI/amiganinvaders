@@ -1,0 +1,99 @@
+--- a/globals.c
++++ b/globals.c
+@@ -36,6 +36,10 @@
+ #ifdef WIN32
+ #define usleep(x) Sleep(x/1000)
+ #endif
++#ifdef __amigaos__
++#include <curses.h>
++#define usleep(x) acurses_sleep((x) / 1000)
++#endif
+ 
+ 
+ /**
+--- a/nInvaders.c
++++ b/nInvaders.c
+@@ -24,7 +24,9 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
++#ifndef __amigaos__
+ #include <sys/time.h>
++#endif
+ #include "nInvaders.h"
+ #include "player.h"
+ #include "aliens.h"
+@@ -118,6 +120,11 @@
+ 		fprintf(stderr,"Supreme Protector\n\n");
+ 	
+ 	showVersion();
++#ifdef __amigaos__
++	fprintf(stderr, "\n(a key closes the window)\n");
++	fflush(stderr);
++	acurses_key(0, 30000);
++#endif
+         exit(0);
+ }
+ 
+@@ -137,6 +144,9 @@
+ 	static int lastmove;
+ 
+ 	ch = getch();		// get key pressed
++#ifdef __amigaos__
++	if (ch == ERR) return;	// the tick came first (main's loop)
++#endif
+ 
+ 	switch (status) {
+ 
+@@ -307,6 +317,7 @@
+ }
+ 
+ 
++#ifndef __amigaos__
+ /**
+  * set up timer
+  */
+@@ -326,6 +337,9 @@
+ }
+ 
+ 
++#endif
++
++
+ int main(int argc, char **argv)
+ {
+  	weite = 0;
+@@ -337,6 +351,25 @@
+ 	evaluateCommandLine(argc, argv);	// evaluate command line parameters
+ 	graphicEngineInit();			// initialize graphic engine
+ 	
++#ifdef __amigaos__
++	// AmigaOS has no SIGALRM: the ticks come from this loop, the keys
++	// are waited for until the next tick is due
++	status = GAME_HIGHSCORE;
++	{
++		long next = acurses_ms() + 1000 / FPS;
++		for (;;) {
++			long now = acurses_ms();
++			if (now >= next) {
++				handleTimer();
++				next += 1000 / FPS;
++				if (now - next > 250) next = now + 1000 / FPS; // behind: no catching up
++				continue;
++			}
++			timeout((int)(next - now));
++			readInput();
++		}
++	}
++#else
+ 	// set up timer/ game handling
+ 	setUpTimer();		
+ 	status = GAME_HIGHSCORE;
+@@ -346,6 +379,7 @@
+ 		// do movements and key-checking
+ 		readInput();
+ 	} while (0 == 0);
++#endif
+ 	
+ 	return 0;
+ }

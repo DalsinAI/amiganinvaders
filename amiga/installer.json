@@ -1,0 +1,13 @@
+{
+  "name": "nInvaders",
+  "version": "0.1.1-gfos1",
+  "drawer": "nInvaders",
+  "program": "nInvaders",
+  "cpu": "68040",
+  "fpu": false,
+  "space": 200000,
+  "modules": [],
+  "parent": "Work:Games",
+  "badge": "icons/art/ninvaders.png",
+  "script": "Install-nInvaders"
+}
