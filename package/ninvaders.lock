@@ -1,0 +1,6 @@
+# Upstream: nInvaders 0.1.1 (Dettus, GPL-2.0-or-later), the release tarball
+# with this SHA-256; package/build-amiga.sh fetches it, never kept here.
+UP_URL=https://downloads.sourceforge.net/project/ninvaders/ninvaders/0.1.1/ninvaders-0.1.1.tar.gz
+UP_SHA256=bfbc5c378704d9cf5e7fed288dac88859149bee5ed0850175759d310b61fd30b
+UP_VERSION=0.1.1
+PORT_VERSION=0.1.1-gfos1
