@@ -1,0 +1,13 @@
+--- a/aliens.c
++++ b/aliens.c
+@@ -239,3 +239,3 @@
+-				tmp = random() % ALIENS_MAX_NUMBER_X;  		// randomly select one of the ...
++				tmp = rand() % ALIENS_MAX_NUMBER_X;  		// randomly select one of the ...
+ 				while (lowest_ship[tmp] == -1) {		// ...aliens at the bottom of ...
+-					tmp = random() % ALIENS_MAX_NUMBER_X;	// ...a column to launch missile
++					tmp = rand() % ALIENS_MAX_NUMBER_X;	// ...a column to launch missile
+--- a/ufo.c
++++ b/ufo.c
+@@ -76,1 +76,1 @@
+-		if ((random() % 200) == 0) {
++		if ((rand() % 200) == 0) {
